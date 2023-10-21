@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmvm5veoigy7q"]
+
+[ext_resource type="Script" path="res://Scripts/mainShaderTest.gd" id="1_cal11"]
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_cal11")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0

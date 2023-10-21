@@ -1,0 +1,116 @@
+[gd_scene load_steps=10 format=3 uid="uid://conis2rq3hwa1"]
+
+[ext_resource type="Script" path="res://Scripts/player.gd" id="1_8m7ve"]
+[ext_resource type="Texture2D" uid="uid://u7xuut8gfxao" path="res://Sprites/nyan_sheet.png" id="2_6utn3"]
+[ext_resource type="Texture2D" uid="uid://pnvbdnsc3s80" path="res://Sprites/pepe_sit_sheet.png" id="4_hui4l"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hi1ya"]
+size = Vector2(95.7203, 104.139)
+
+[sub_resource type="Animation" id="Animation_i1x1x"]
+resource_name = "run"
+length = 0.3
+loop_mode = 1
+step = 0.08
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("cat:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.16, 0.24, 0.32),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8o14m"]
+_data = {
+"run": SubResource("Animation_i1x1x")
+}
+
+[sub_resource type="Animation" id="Animation_xtv2j"]
+resource_name = "idel"
+length = 0.35
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("pepe:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rl260"]
+_data = {
+"idel": SubResource("Animation_xtv2j")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j827o"]
+size = Vector2(216, 212)
+
+[node name="Dtct_stat" type="Node2D"]
+texture_filter = 1
+scale = Vector2(0.25, 0.25)
+
+[node name="rcv" type="Area2D" parent="."]
+script = ExtResource("1_8m7ve")
+
+[node name="cat" type="Sprite2D" parent="rcv"]
+texture_filter = 1
+scale = Vector2(0.685, 0.685)
+texture = ExtResource("2_6utn3")
+hframes = 5
+
+[node name="rcv_col" type="CollisionShape2D" parent="rcv"]
+visible = false
+position = Vector2(-0.0114354, 0.0698483)
+rotation = -0.00290892
+shape = SubResource("RectangleShape2D_hi1ya")
+debug_color = Color(0.698039, 0.301961, 0.968627, 0.419608)
+
+[node name="Timer" type="Timer" parent="rcv"]
+wait_time = 0.3
+
+[node name="player_anim" type="AnimationPlayer" parent="rcv"]
+autoplay = "run"
+libraries = {
+"": SubResource("AnimationLibrary_8o14m")
+}
+
+[node name="pepe" type="Sprite2D" parent="rcv"]
+visible = false
+position = Vector2(7.9595, -8.06)
+scale = Vector2(0.192934, 0.1934)
+texture = ExtResource("4_hui4l")
+hframes = 5
+vframes = 2
+frame = 2
+
+[node name="pepe_anim" type="AnimationPlayer" parent="rcv"]
+autoplay = "idel"
+libraries = {
+"": SubResource("AnimationLibrary_rl260")
+}
+
+[node name="pub" type="Area2D" parent="."]
+visible = false
+monitoring = false
+
+[node name="col" type="CollisionShape2D" parent="pub"]
+shape = SubResource("RectangleShape2D_j827o")
+debug_color = Color(0.207843, 0.603922, 0.596078, 0.419608)
+
+[connection signal="area_entered" from="rcv" to="rcv" method="_on_area_entered"]
+[connection signal="area_exited" from="rcv" to="rcv" method="_on_area_exited"]
+[connection signal="input_event" from="rcv" to="rcv" method="_on_input_event"]
+[connection signal="mouse_entered" from="rcv" to="rcv" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="rcv" to="rcv" method="_on_mouse_exited"]
+[connection signal="timeout" from="rcv/Timer" to="rcv" method="_on_timer_timeout"]
